@@ -50,7 +50,6 @@ I²C uses a clock line (SCL) and a bidirectional data line (SDA). The Pico acts 
 2. **Test initialization and data transfer.** Run `hello_from_pico.py`. It scans for the display, initializes the SSD1306, draws **Hello from Pico** in a framebuffer, and calls `oled.show()` to transfer the pixels. A successful run prints `Text sent` and shows the message on the screen.
 3. **Exercise repeated writes.** Run `old_dance.py`. It cycles through four stick-figure poses across 40 frames, pausing 150 ms after each update. Watch for the moving figure and check the Shell for a frame-specific transfer error.
 
-**Debugging observation.** During bring-up, the OLED answered an address scan, but a later initialization command raised `OSError: [Errno 19] ENODEV`. The scan established that the device acknowledged its address at that moment. To locate later failures, the text example reports which stage failed and tries up to five times. If the scan is intermittent, check the SDA, SCL, power, and ground connections before rerunning it. The exact cause of the observed failure was unconfirmed.
 
 ## 3. I²C protocol testing with a sensor register
 
