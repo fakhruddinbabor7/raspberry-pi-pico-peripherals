@@ -51,21 +51,3 @@ I²C uses a clock line (SCL) and a bidirectional data line (SDA). The Pico acts 
 3. **Exercise repeated writes.** Run `old_dance.py`. It cycles through four stick-figure poses across 40 frames, pausing 150 ms after each update. Watch for the moving figure and check the Shell for a frame-specific transfer error.
 
 
-## 3. I²C protocol testing with a sensor register
-
-Run `address_sensor.py` with **GP6 as SDA and GP7 as SCL**. This script uses a **10 kHz** clock and probes the two candidate addresses independently.
-
-The call `bus.readfrom_mem(address, 0xD0, 1)` selects register `0xD0` and reads one byte. For each candidate address, the script prints either the returned chip ID in hexadecimal or the read error. An error at the unused address is expected when a single sensor is connected. To validate sensor identity, compare the returned byte with the chip ID in the datasheet for the exact sensor on the board.
-
-## 4. ADC measurements
-
-| Script | How the reading is calculated | What to check |
-|---|---|---|
-| `temp_ck.py` | Reads ADC channel 4, scales the value to volts using a nominal 3.3 V reference, then estimates die temperature with `27 - (voltage - 0.706) / 0.001721`. | Five readings in °C, one second apart. These describe the RP2040 die and can differ from room temperature. |
-| `voltage_receive_mesurement.py` | Reads GP29 and computes `raw / 65535 × 3.3 × 3`. The final factor accounts for the original Pico's VSYS divide-by-three sensing circuit. | Five voltage estimates, one second apart. For an accuracy check, compare against a meter reading across VSYS and GND. |
-
-Both conversions use the 0–65535 scale returned by MicroPython's `read_u16()`. The voltage calculation assumes the original Pico board's analog wiring and a nominal reference voltage.
-
-## What has been observed on hardware
-
-The OLED scan returned `0x3C`, and an intermittent initialization error was observed during bring-up. The UART transcript above is expected output. The visible display checks, chip-ID comparison, and ADC checks describe how to reproduce and evaluate each experiment on another board.
